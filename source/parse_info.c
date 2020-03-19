@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_info.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 15:37:14 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/12 16:01:32 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/19 14:17:43 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,10 @@ int		dup_piece(t_piece *piece, int y)
 	return (1);
 }
 
-int		read_piece(int x)
+int		read_piece(t_piece *piece, int x)
 {
-	t_piece	*piece;
 	char	*line;
 
-	if (!(piece = (t_piece*)malloc(sizeof(t_piece))))
-		return (0);
 	while (get_next_line(0, &line))
 	{
 		if (ft_strstr(line, "Piece"))
@@ -98,7 +95,7 @@ int		dup_board(t_info *info, int y)
 	return (1);
 }
 
-int		read_output(t_info *info, int x)
+int		read_output(t_info *info, t_piece *piece, int x)
 {
 	char	*line;
 
@@ -121,8 +118,10 @@ int		read_output(t_info *info, int x)
 		}
 		free(line);
 	}
-	if (!(dup_board(info, 0)) || !(read_piece(0)))
+	if (!(dup_board(info, 0)) || !(read_piece(piece, 0)))
 		return (0);
+	get_positions(info, 0, 0);
+	reach_enemy(info, piece, 0, 0);
 	return (1);
 }
 
