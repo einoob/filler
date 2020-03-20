@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: elindber <elindber@student.42.fr>          +#+  +:+       +#+         #
+#    By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/11 15:37:56 by elindber          #+#    #+#              #
-#    Updated: 2020/03/11 15:44:39 by elindber         ###   ########.fr        #
+#    Updated: 2020/03/20 14:31:19 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = elindber.filler
+NAME = ./players/elindber.filler
 
 SRC = source/*.c
 
