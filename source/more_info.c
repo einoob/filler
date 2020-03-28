@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/18 14:42:36 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/20 13:59:46 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/27 13:55:30 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,22 @@ void	determine_direction(t_info *info)
 
 void	get_positions(t_info *info, int x, int y)
 {
-	info->own = info->player == 1 ? 'O' : 'X';
-	info->enemy = info->player == 1 ? 'X' : 'O';
+	if (info->own_char && info->enemy_char)
+		return ;
+	info->own_char = info->player == 1 ? "Oo" : "Xx";
+	info->enemy_char = info->player == 1 ? "Xx" : "Oo";
 	while (info->map[y] != NULL)
 	{
 		while (info->map[y][x] != '\0')
 		{
-			if (info->map[y][x] == info->own)
+			if (info->map[y][x] == info->own_char[0]
+			|| info->map[y][x] == info->own_char[1])
 			{
 				info->own_x = x;
 				info->own_y = y;
 			}
-			if (info->map[y][x] == info->enemy)
+			if (info->map[y][x] == info->enemy_char[0]
+			|| info->map[y][x] == info->enemy_char[1])
 			{
 				info->enemy_x = x;
 				info->enemy_y = y;
@@ -48,6 +52,5 @@ void	get_positions(t_info *info, int x, int y)
 		x = 0;
 		y++;
 	}
-//	ft_printf("own: %c %d %d\nenemy:%c %d %d\n", info->own, info->own_x, info->own_y, info->enemy, info->enemy_x, info->enemy_y);
 	determine_direction(info);
 }

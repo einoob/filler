@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 15:37:14 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/23 14:07:40 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/27 14:28:26 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int		read_piece(t_piece *piece, int x)
 			free(line);
 			break ;
 		}
+		free(line);
 	}
 	dup_piece(piece, 0);
 	piece_values(piece, 0, 0, 0);
@@ -86,13 +87,9 @@ int		dup_board(t_info *info, int y)
 	char	*line;
 
 	get_next_line(0, &line);
-	free(line);
+//	free(line);
 	while (y < info->height && get_next_line(0, &line))
 	{
-		if (ft_strchr(line, 'x'))
-			info->player = 1;
-		else if (ft_strchr(line, 'o'))
-			info->player = 2;
 		if (!(info->map[y] = ft_strsub(line, 4, info->width)))
 			return (0);
 		free(line);

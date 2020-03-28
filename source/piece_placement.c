@@ -6,11 +6,65 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/23 14:00:20 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/28 02:12:56 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
+
+int		character_count(t_info *info, int line)
+{
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (info->map[line][i])
+	{
+		if (info->map[line][i] != '.' || info->map[line][i] != '.')
+			count++;
+		i++;
+	}
+	return (count > info->width / 3);
+}
+
+void	direction_change(t_info *info, int line)
+{
+	while (!info->contact && line < info->height)
+	{
+		if ((info->direction < 3 && 
+		(ft_strchr(info->map[0], info->own_char[0]) || character_count(info, 0)))
+		|| (info->direction > 2 && (ft_strchr(info->map[info->height - 1], info->own_char[0]) ||
+		character_count(info, info->height - 1))))
+		{
+			if (info->direction == DOWNRIGHT || info->direction == UPRIGHT)
+				info->direction = info->direction == UPRIGHT ? DOWNRIGHT : UPRIGHT;
+			else if (info->direction == UPLEFT || info->direction == DOWNLEFT)
+				info->direction = info->direction == UPLEFT ? DOWNLEFT : UPLEFT;
+			info->contact = 1;
+		}
+	//	if (ft_strchr(info->map[line], info->own_char[0])
+	//	&& (ft_strchr(info->map[line], info->enemy_char[0])
+	//	|| ft_strchr(info->map[line], info->enemy_char[1])))
+	//	{
+	//		if (info->direction == DOWNRIGHT || info->direction == UPRIGHT)
+	//			info->direction = info->direction == UPRIGHT ? DOWNRIGHT : UPRIGHT;
+	//		else if (info->direction == UPLEFT || info->direction == DOWNLEFT)
+	//			info->direction = info->direction == UPLEFT ? DOWNLEFT : UPLEFT;
+	//		info->contact = 1;
+	//	}
+		line++;
+	}
+	if (info->contact == 1 && ((character_count(info, 0) && info->direction < 3)
+	|| (info->direction > 2 && character_count(info, info->height - 1))))
+	{
+		if (info->direction == UPLEFT || info->direction == UPRIGHT)
+			info->direction = info->direction == UPLEFT ? DOWNLEFT : DOWNRIGHT;
+		else if (info->direction == DOWNLEFT || info->direction == DOWNRIGHT)
+			info->direction = info->direction == DOWNLEFT ? UPLEFT : UPRIGHT;
+		info->contact++;
+	}
+}
 
 int		check_fit(t_info *info, t_piece *piece, int x, int y)
 {
@@ -21,20 +75,18 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 	overlap = 0;
 	px = 0;
 	py = 0;
-	if (x + piece->width > info->width)
-		x -= (x + piece->width - info->width);
-	if (y + piece->height > info->height)
-		y -= (y + piece->height - info->height);
 	while (py < piece->height)
 	{
 		while (piece->piece[py][px] != '\0')
 		{
-			if (piece->piece[py][px] == '*' && info->map[y][x] == info->own)
+			if (piece->piece[py][px] == '*' && (info->map[y][x] ==
+			info->own_char[0] || info->map[y][x] == info->own_char[1]))
 				overlap++;
 			if (overlap > 1)
 				return (0);
-			if (piece->piece[py][px] == '*'
-			&& (info->map[y][x] != info->own && info->map[y][x] != '.'))
+			if (piece->piece[py][px] == '*' && (info->map[y][x]
+			!= info->own_char[0] && info->map[y][x] != info->own_char[1]
+			&& info->map[y][x] != '.'))
 				return(0);
 			px++;
 			x++;
@@ -47,52 +99,77 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 	if (overlap != 1)
 		return (0);
 	return (1);
+}
+
+void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
+{
+	int		incre_y;
+	int		incre_x;
 	
+	incre_y = y == 0 ? 1 : -1;
+	incre_x = x == 0 ? 1 : -1;
+	while (!(check_fit(info, piece, x, y)))
+	{
+		y += incre_y;
+		if (y < 0 || y> info->height - piece->height)
+		{
+			x += incre_x;
+			y = y == -1 ? info->height - piece->height : 0;
+		}
+		if (x < 0 || x > info->width - piece->width)
+		{
+			ft_printf("0 0\n");
+			info->stop = 1;
+			return ;
+		}
+	}
+//	int i = 0;
+//	while (i < 42424242)
+//		i++;
+	ft_printf("%d %d\n", y, x);
 }
 
 void	place_piece(t_info *info, t_piece *piece, int x, int y)
 {
-	if (!(check_fit(info, piece, x, y)))
+	int		incre_y;
+	int		incre_x;
+	
+	incre_y = y == 0 ? 1 : -1;
+	incre_x = x == 0 ? 1 : -1;
+	while (!(check_fit(info, piece, x, y)))
 	{
-		x++;
-		if (piece->piece[y][x] == '\0')
+		x += incre_x;
+		if (x < 0 || x > info->width - piece->width)
 		{
-			y++;
-			x = 0;
+			y += incre_y;
+			x = x == -1 ? info->width - piece->width : 0;
 		}
-		place_piece(info, piece, x, y);
+		if (y < 0 || y > info->height - piece->height)
+		{
+			ft_printf("0 0\n");
+			info->stop = 1;
+			return ;
+		}
 	}
+	direction_change(info, 0);
+//	int i = 0;
+//	while (i < 42424242)
+//		i++;
 	ft_printf("%d %d\n", y, x);
-}
-
-int		get_x_overlap(t_info *info, t_piece *piece, int x, int y)
-{
-	if (info->direction == UPLEFT || info->direction == DOWNLEFT)
-	{
-		x = piece->width - 1;
-		while (piece->piece[y][x] != '*')
-			x--;
-	}
-	else
-		while (piece->piece[y][x] != '*')
-			x++;
-	return (x);
 }
 
 void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 {
 	if (info->direction == UPLEFT || info->direction == UPRIGHT)
-		y = piece->last_y;
+		y = 0;	
 	else if (info->direction == DOWNRIGHT || info->direction == DOWNLEFT)
-		y = piece->first_y;
-	x = get_x_overlap(info, piece, x, y);
-	y = info->own_y - y < 0 ? 0 : info->own_y - y;
-	x = info->own_x - x < 0 ? 0 : info->own_x - x;
-	place_piece(info, piece, x, y);
-//	if (info->direction == UPLEFT || info->direction == UPRIGHT)
-//		x = info->direction == UPLEFT ? info->own_x + x : info->own_x - x;
-//	else
-//		x = info->direction == DOWNLEFT ? info->own_x + x : info->own_x - x;
-//	ft_printf("%d %d\n", y, x);
-	//	place_piece(info, piece, x, y);
+		y = info->height - piece->height;
+	if (info->direction == UPLEFT || info->direction == DOWNLEFT)
+		x = 0;
+	else if (info->direction == UPRIGHT || info->direction == DOWNRIGHT)
+		x = info->width - piece->width;
+	if (info->contact == 2)//&& character_count(info, 0) && character_count(info, info->height - 1))
+		place_piece_prior_y(info, piece, x, y);
+	else
+		place_piece(info, piece, x, y);
 }

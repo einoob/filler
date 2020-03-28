@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:26:42 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/19 14:18:38 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/27 13:51:35 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_piece
 typedef struct	s_info
 {
 	char		**map;
-	char		own;
-	char		enemy;
+	char		*own_char;
+	char		*enemy_char;
 	int			player;
 	int			height;
 	int			width;
@@ -49,10 +49,13 @@ typedef struct	s_info
 	int			enemy_x;
 	int			enemy_y;
 	int			direction;
+	int			stop;
+	int			contact;
 }				t_info;
 
 int				read_output(t_info *info, t_piece *piece, int x);
 void			get_positions(t_info *info, int x, int y);
 void			reach_enemy(t_info *info, t_piece *piece, int x, int y);
+void			block_enemy(t_info *info, t_piece *piece, int x, int y);
 
 #endif
