@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/28 02:12:56 by elindber         ###   ########.fr       */
+/*   Updated: 2020/03/30 02:57:50 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		character_count(t_info *info, int line)
 
 void	direction_change(t_info *info, int line)
 {
-	while (!info->contact && line < info->height)
+	while (!info->phase && line < info->height)
 	{
 		if ((info->direction < 3 && 
 		(ft_strchr(info->map[0], info->own_char[0]) || character_count(info, 0)))
@@ -41,28 +41,19 @@ void	direction_change(t_info *info, int line)
 				info->direction = info->direction == UPRIGHT ? DOWNRIGHT : UPRIGHT;
 			else if (info->direction == UPLEFT || info->direction == DOWNLEFT)
 				info->direction = info->direction == UPLEFT ? DOWNLEFT : UPLEFT;
-			info->contact = 1;
+			info->phase = 1;
 		}
-	//	if (ft_strchr(info->map[line], info->own_char[0])
-	//	&& (ft_strchr(info->map[line], info->enemy_char[0])
-	//	|| ft_strchr(info->map[line], info->enemy_char[1])))
-	//	{
-	//		if (info->direction == DOWNRIGHT || info->direction == UPRIGHT)
-	//			info->direction = info->direction == UPRIGHT ? DOWNRIGHT : UPRIGHT;
-	//		else if (info->direction == UPLEFT || info->direction == DOWNLEFT)
-	//			info->direction = info->direction == UPLEFT ? DOWNLEFT : UPLEFT;
-	//		info->contact = 1;
-	//	}
 		line++;
 	}
-	if (info->contact == 1 && ((character_count(info, 0) && info->direction < 3)
-	|| (info->direction > 2 && character_count(info, info->height - 1))))
+	if (info->phase == 1 && (((character_count(info, 0) || ft_strchr(info->map[0], info->own_char[0]))
+	&& info->direction < 3) || (info->direction > 2 && (ft_strchr(info->map[info->height - 1], info->own_char[0])
+	|| character_count(info, info->height - 1)))))
 	{
 		if (info->direction == UPLEFT || info->direction == UPRIGHT)
 			info->direction = info->direction == UPLEFT ? DOWNLEFT : DOWNRIGHT;
 		else if (info->direction == DOWNLEFT || info->direction == DOWNRIGHT)
 			info->direction = info->direction == DOWNLEFT ? UPLEFT : UPRIGHT;
-		info->contact++;
+		info->phase++;
 	}
 }
 
@@ -101,34 +92,6 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 	return (1);
 }
 
-void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
-{
-	int		incre_y;
-	int		incre_x;
-	
-	incre_y = y == 0 ? 1 : -1;
-	incre_x = x == 0 ? 1 : -1;
-	while (!(check_fit(info, piece, x, y)))
-	{
-		y += incre_y;
-		if (y < 0 || y> info->height - piece->height)
-		{
-			x += incre_x;
-			y = y == -1 ? info->height - piece->height : 0;
-		}
-		if (x < 0 || x > info->width - piece->width)
-		{
-			ft_printf("0 0\n");
-			info->stop = 1;
-			return ;
-		}
-	}
-//	int i = 0;
-//	while (i < 42424242)
-//		i++;
-	ft_printf("%d %d\n", y, x);
-}
-
 void	place_piece(t_info *info, t_piece *piece, int x, int y)
 {
 	int		incre_y;
@@ -136,6 +99,8 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 	
 	incre_y = y == 0 ? 1 : -1;
 	incre_x = x == 0 ? 1 : -1;
+	if (info->phase == 3 && place_middle(info, piece, 0, 0) == 1)
+		return ;
 	while (!(check_fit(info, piece, x, y)))
 	{
 		x += incre_x;
@@ -168,7 +133,9 @@ void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 		x = 0;
 	else if (info->direction == UPRIGHT || info->direction == DOWNRIGHT)
 		x = info->width - piece->width;
-	if (info->contact == 2)//&& character_count(info, 0) && character_count(info, info->height - 1))
+	if (info->phase == 3)
+		most_enemy(info, 0);
+	if (info->phase == 2)//&& character_count(info, 0) && character_count(info, info->height - 1))
 		place_piece_prior_y(info, piece, x, y);
 	else
 		place_piece(info, piece, x, y);
