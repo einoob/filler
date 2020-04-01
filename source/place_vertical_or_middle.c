@@ -6,11 +6,22 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/30 02:06:31 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 19:06:10 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 01:22:08 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
+
+int		enemy_direction(t_info *info, t_piece *piece)
+{
+	if (most_enemy(info, piece, 0, 0))
+		return (1);
+	if (info->direction == 4)
+		info->direction -= 3;
+	else
+		info->direction++;
+	return (0);
+}
 
 int		far_side(t_info *info, int row, int count, int own)
 {
@@ -63,17 +74,16 @@ void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
 	place_block(info, y, x);
 }
 
-int		place_middle(t_info *info, t_piece *piece, int x, int y)
+int		place_middle(t_info *info, t_piece *piece, int x, int direction)
 {
 	int		incre_x;
 	int		incre_y;
+	int		y;
 
-	incre_x = info->direction % 2 == 0 ? -1 : 1;
-	incre_y = info->direction < 3 ? -1 : 1;
+	incre_x = direction % 2 == 0 ? -1 : 1;
+	incre_y = direction < 3 ? -1 : 1;
 	x = -1 + info->width / 2;
-	y = -1 + info->width / 2;
-//	x = incre_x == 1 ? info->width / 6 : 5 * (info->width / 6);
-//	y = incre_y == 1 ? info->height / 6 : 5 * (info->height / 6);
+	y = -1 + info->height / 2;
 	if (x + piece->width > info->width || y + piece->height > info->height)
 		return (0);
 	while (!(check_fit(info, piece, x, y)))

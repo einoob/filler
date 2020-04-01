@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:50:16 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 19:01:14 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:27:27 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int		main(void)
 	info->phase = 0;
 	while (1)
 	{
-	//	int i = 0;
-	//	while (i < 42424242)
-	//		i++;
+//		int i = 0;
+//		while (i < 42424242)
+//			i++;
 		reset_piece(piece);
 		if (!(read_output(info, piece, 0)))
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 15:37:14 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 17:34:41 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 01:24:01 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,23 +126,3 @@ int		read_output(t_info *info, t_piece *piece, int x)
 		return (0);
 	return (1);
 }
-
-/*
-	ft_printf("ph:%d pw:%d\n", piece->height, piece->width);
-	ft_printf("fy:%d ly:%d fx:%d lx:%d\n", piece->first_y, piece->last_y, piece->first_x, piece->last_x);
-	int	i = 0;
-	while (i < piece->height)
-	{
-		ft_printf("%s\n", piece->piece[i]);
-		i++;
-	}
-**
-	ft_printf("mh:%d mw:%d\n", info->height, info->width);
-	ft_printf("player:%d\n", info->player);
-	int i = 0;
-	while (i < info->height)
-	{
-		ft_printf("%s\n", info->map[i]);
-		i++;
-	}
-*/

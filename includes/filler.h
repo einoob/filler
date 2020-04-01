@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:26:42 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 18:26:15 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 01:24:23 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ typedef struct	s_info
 	int			stop;
 	int			phase;
 	int			alter;
+	int			most_enemy;
 }				t_info;
 
 int				read_output(t_info *info, t_piece *piece, int x);
 int				check_fit(t_info *info, t_piece *piece, int x, int y);
-int				place_middle(t_info *info, t_piece *piece, int x, int y);
+int				place_middle(t_info *info, t_piece *piece, int x, int direction);
 void			get_positions(t_info *info, int x, int y);
 void			reach_enemy(t_info *info, t_piece *piece, int x, int y);
-int				enemy_direction(t_info *info, t_piece *piece, int x, int y);
+int				enemy_direction(t_info *info, t_piece *piece);
+int				most_enemy(t_info *info, t_piece *piece, int max, int res);
 void			place_piece_prior_y(t_info *info, t_piece *piece, int x, int y);
 void			place_block(t_info *info, int y, int x);
 

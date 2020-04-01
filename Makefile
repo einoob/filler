@@ -6,7 +6,7 @@
 #    By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/11 15:37:56 by elindber          #+#    #+#              #
-#    Updated: 2020/03/20 14:31:19 by elindber         ###   ########.fr        #
+#    Updated: 2020/04/02 01:29:50 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ clean:
 	
 fclean: clean
 	@ /bin/rm -f $(NAME)
+	@ /bin/rm -f filler.trace	
 	@ make -C libftprintf/ fclean
 	@ echo "Removed: elindber.filler."
 

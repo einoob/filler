@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 18:56:04 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 01:26:59 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 			if (piece->piece[py][px] == '*' && (info->board[y][x] ==
 			info->own_char[0] || info->board[y][x] == info->own_char[1]))
 				overlap++;
-			if (overlap > 1 || (piece->piece[py][px] == '*' && (info->board[y][x]
-			!= info->own_char[0] && info->board[y][x] != info->own_char[1]
-			&& info->board[y][x] != '.')))
+			if (overlap > 1 || (piece->piece[py][px] == '*' &&
+			(info->board[y][x] != info->own_char[0] && info->board[y][x]
+			!= info->own_char[1] && info->board[y][x] != '.')))
 				return (0);
 			x++;
 		}
@@ -88,11 +88,9 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 	int		incre_y;
 	int		incre_x;
 
-	y = info->direction < 3 ? 0 : info->height - piece->height;
-	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
 	incre_y = y == 0 ? 1 : -1;
 	incre_x = x == 0 ? 1 : -1;
-	if (info->phase > 2 && place_middle(info, piece, 0, 0) == 1)
+	if (info->phase > 2 && place_middle(info, piece, 0, info->direction) == 1)
 		return ;
 	while (!(check_fit(info, piece, x, y)))
 	{
@@ -116,13 +114,12 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 
 void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 {
-	x += 0;
-	y += 0;
-	if (info->phase == 3)
-		enemy_direction(info, piece, 0, 0);
-	if (info->phase == 2) //&& info->alter % 2 == 1)
+	y = info->direction < 3 ? 0 : info->height - piece->height;
+	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
+	if (info->phase == 3 && enemy_direction(info, piece))
+		return ;
+	if (info->phase == 2)
 		place_piece_prior_y(info, piece, x, y);
 	else
 		place_piece(info, piece, x, y);
-//	info->alter++;
 }
