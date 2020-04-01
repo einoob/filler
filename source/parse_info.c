@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 15:37:14 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/27 14:28:26 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/01 17:34:41 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,15 @@ int		dup_board(t_info *info, int y)
 	char	*line;
 
 	get_next_line(0, &line);
-//	free(line);
+	free(line);
 	while (y < info->height && get_next_line(0, &line))
 	{
-		if (!(info->map[y] = ft_strsub(line, 4, info->width)))
+		if (!(info->board[y] = ft_strsub(line, 4, info->width)))
 			return (0);
 		free(line);
 		y++;
 	}
-	info->map[y] = NULL;
+	info->board[y] = NULL;
 	return (1);
 }
 
@@ -114,7 +114,7 @@ int		read_output(t_info *info, t_piece *piece, int x)
 			info->height = ft_atoi(&(line[x]));
 			x += ft_nbrcount(info->height) + 1;
 			info->width = ft_atoi(&(line[x]));
-			if (!(info->map =
+			if (!(info->board =
 			(char**)malloc(sizeof(char*) * (info->height + 1))))
 				return (0);
 			free(line);
@@ -124,8 +124,6 @@ int		read_output(t_info *info, t_piece *piece, int x)
 	}
 	if (!(dup_board(info, 0)) || !(read_piece(piece, 0)))
 		return (0);
-	get_positions(info, 0, 0);
-	reach_enemy(info, piece, 0, 0);
 	return (1);
 }
 

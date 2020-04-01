@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:26:42 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/30 02:11:22 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/01 18:26:15 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_piece
 
 typedef struct	s_info
 {
-	char		**map;
+	char		**board;
 	char		*own_char;
 	char		*enemy_char;
 	int			player;
@@ -46,11 +46,14 @@ typedef struct	s_info
 	int			width;
 	int			own_x;
 	int			own_y;
+	int			last_x;
+	int			last_y;
 	int			enemy_x;
 	int			enemy_y;
 	int			direction;
 	int			stop;
 	int			phase;
+	int			alter;
 }				t_info;
 
 int				read_output(t_info *info, t_piece *piece, int x);
@@ -58,7 +61,8 @@ int				check_fit(t_info *info, t_piece *piece, int x, int y);
 int				place_middle(t_info *info, t_piece *piece, int x, int y);
 void			get_positions(t_info *info, int x, int y);
 void			reach_enemy(t_info *info, t_piece *piece, int x, int y);
-void			most_enemy(t_info *info, int max);
+int				enemy_direction(t_info *info, t_piece *piece, int x, int y);
 void			place_piece_prior_y(t_info *info, t_piece *piece, int x, int y);
+void			place_block(t_info *info, int y, int x);
 
 #endif
