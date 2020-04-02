@@ -6,14 +6,13 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:26:42 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 01:24:23 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 17:41:27 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FILLER_H
 # define FILLER_H
 
-# include <unistd.h>
 # include <stdlib.h>
 # include "../libftprintf/includes/ft_printf.h"
 # include "../libftprintf/includes/get_next_line.h"
@@ -46,15 +45,15 @@ typedef struct	s_info
 	int			width;
 	int			own_x;
 	int			own_y;
-	int			last_x;
-	int			last_y;
 	int			enemy_x;
 	int			enemy_y;
 	int			direction;
-	int			stop;
 	int			phase;
-	int			alter;
 	int			most_enemy;
+	int			contacts;
+	int			put_x;
+	int			put_y;
+	int			stop;
 }				t_info;
 
 int				read_output(t_info *info, t_piece *piece, int x);
@@ -63,7 +62,7 @@ int				place_middle(t_info *info, t_piece *piece, int x, int direction);
 void			get_positions(t_info *info, int x, int y);
 void			reach_enemy(t_info *info, t_piece *piece, int x, int y);
 int				enemy_direction(t_info *info, t_piece *piece);
-int				most_enemy(t_info *info, t_piece *piece, int max, int res);
+int				most_enemy(t_info *info, int max, int res);
 void			place_piece_prior_y(t_info *info, t_piece *piece, int x, int y);
 void			place_block(t_info *info, int y, int x);
 

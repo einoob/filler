@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/30 02:06:31 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 01:22:08 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 18:06:56 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 int		enemy_direction(t_info *info, t_piece *piece)
 {
-	if (most_enemy(info, piece, 0, 0))
-		return (1);
-	if (info->direction == 4)
-		info->direction -= 3;
-	else
-		info->direction++;
+	piece->height += 0;
+	info->direction = most_enemy(info, 0, 0);
+//	if (most_enemy(info, piece, 0, 0))
+//		return (1);
+//	info->direction = info->most_enemy < 3 ? info->most_enemy + 2 : info->most_enemy - 2;
+//	if (info->most_enemy < 3)
+//		info->direction = info->most_enemy < 2 ? info->most_enemy + 3 : info->most_enemy + 1;
+//	else
+//		info->direction = info->most_enemy < 4 ? info->most_enemy - 1 : info->most_enemy - 3;
 	return (0);
 }
 
@@ -42,7 +45,7 @@ int		far_side(t_info *info, int row, int count, int own)
 			break ;
 	}
 	return (count > info->height / 3 ||
-	own >= info->height / 4);
+	own >= info->height / 10);
 }
 
 void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
@@ -71,10 +74,10 @@ void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
 	}
 	if (info->phase == 2 && far_side(info, 0, 0, 0))
 		info->phase = 3;
-	place_block(info, y, x);
+	ft_printf("%d %d\n", y, x);
 }
 
-int		place_middle(t_info *info, t_piece *piece, int x, int direction)
+/*int		place_middle(t_info *info, t_piece *piece, int x, int direction)
 {
 	int		incre_x;
 	int		incre_y;
@@ -82,7 +85,7 @@ int		place_middle(t_info *info, t_piece *piece, int x, int direction)
 
 	incre_x = direction % 2 == 0 ? -1 : 1;
 	incre_y = direction < 3 ? -1 : 1;
-	x = -1 + info->width / 2;
+	x = -2 + info->width / 2;
 	y = -1 + info->height / 2;
 	if (x + piece->width > info->width || y + piece->height > info->height)
 		return (0);
@@ -94,9 +97,46 @@ int		place_middle(t_info *info, t_piece *piece, int x, int direction)
 			y += incre_y;
 			x = -1 + info->width / 2;
 		}
-		if (y == info->height / 6 || y + piece->height > info->height)
+		if (y == info->height / 5 || y == 4 * (info->height / 5) || 
+		y + piece->height > info->height)
 			return (0);
 	}
-	place_block(info, y, x);
+	ft_printf("%d %d\n", y, x);
 	return (1);
+}*/
+
+int		place_middle(t_info *info, t_piece *piece, int x, int direction)
+{
+	int		incre_x;
+	int		incre_y;
+	int		contacts;
+	int		y;
+
+	incre_x = direction % 2 == 0 ? -1 : 1;
+	incre_y = direction < 3 ? -1 : 1;
+	x = -2 + info->width / 2;
+	y = -1 + info->height / 2;
+	contacts = 0;
+	while (y != info->height / 5 && y != 4 * (info->height / 5)
+	&& y <= info->height - piece->height)
+	{
+		x += incre_x;
+		if (x < 0 || x + piece->width > info->width)
+		{
+			y += incre_y;
+			x = -1 + info->width / 2;
+		}
+		if (check_fit(info, piece, x, y))
+		{
+			if (info->contacts > contacts)
+			{
+				info->put_x = x;
+				info->put_y = y;
+				contacts = info->contacts;
+			}
+		}
+	}
+	if (contacts > 0)
+		ft_printf("%d %d\n", info->put_y, info->put_x);
+	return (contacts > 0);
 }

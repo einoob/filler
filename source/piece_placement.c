@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 01:26:59 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 18:01:03 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,27 @@ void	direction_change(t_info *info)
 	}
 }
 
+int		count_contacts(t_info *info, int x, int y)
+{
+	int		count;
+
+	count = 0;
+	if (x + 1 < info->width && (info->board[y][x + 1] == info->enemy_char[0] ||
+	info->board[y][x + 1] == info->enemy_char[1]))
+		count++;
+	if (x != 0 && (info->board[y][x - 1] == info->enemy_char[0] ||
+	info->board[y][x - 1] == info->enemy_char[1]))
+		count++;
+	if (y + 1 < info->height && (info->board[y + 1][x] == info->enemy_char[0] ||
+	info->board[y][x] == info->enemy_char[1]))
+		count++;
+	if (y != 0 && (info->board[y - 1][x] == info->enemy_char[0] ||
+	info->board[y][x] == info->enemy_char[1]))
+		count++;
+	info->contacts += count;
+	return (1);
+}
+
 int		check_fit(t_info *info, t_piece *piece, int x, int y)
 {
 	int		overlap;
@@ -63,12 +84,14 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 	overlap = 0;
 	px = -1;
 	py = -1;
+	info->contacts = 0;
 	while (++py < piece->height)
 	{
 		while (piece->piece[py][++px] != '\0')
 		{
 			if (piece->piece[py][px] == '*' && (info->board[y][x] ==
-			info->own_char[0] || info->board[y][x] == info->own_char[1]))
+			info->own_char[0] || info->board[y][x] == info->own_char[1])
+			&& count_contacts(info, x, y))
 				overlap++;
 			if (overlap > 1 || (piece->piece[py][px] == '*' &&
 			(info->board[y][x] != info->own_char[0] && info->board[y][x]
@@ -109,15 +132,52 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 	}
 	if (info->phase < 2)
 		direction_change(info);
-	place_block(info, y, x);
+	ft_printf("%d %d\n", y, x);
+}
+
+int		block_enemy(t_info *info, t_piece *piece, int x, int y)
+{
+	int		contacts;
+	int		incre_x;
+	int		incre_y;
+
+	contacts = 0;
+	incre_y = y == 0 ? 1 : -1;
+	incre_x = x == 0 ? 1 : -1;
+	while (y >= 0 && y <= info->height - piece->height)
+	{
+		while (x >= 0 && x <= info->width - piece->width)
+		{
+			if (check_fit(info, piece, x, y))
+			{
+				if (info->contacts > contacts)
+				{
+					info->put_x = x;
+					info->put_y = y;
+					contacts = info->contacts;
+				}
+			}
+			x += incre_x;
+		}
+		y += incre_y;
+		x = incre_x < 0 ? info->width - piece->width : 0;
+	}
+	return (contacts > 0);
 }
 
 void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 {
+	info->put_x = 0;
+	info->put_y = 0;
 	y = info->direction < 3 ? 0 : info->height - piece->height;
 	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
-	if (info->phase == 3 && enemy_direction(info, piece))
+	if (info->phase > 2) 
+		enemy_direction(info, piece);
+	if (info->phase >= 2 && block_enemy(info, piece, x, y))
+	{
+		ft_printf("%d %d\n", info->put_y, info->put_x);
 		return ;
+	}
 	if (info->phase == 2)
 		place_piece_prior_y(info, piece, x, y);
 	else

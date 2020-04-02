@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 13:48:09 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 01:23:35 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 18:05:22 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		bottom_right(t_info *info, int x, int y)
 	return (count);
 }
 
-int		most_enemy(t_info *info, t_piece *piece, int max, int res)
+int		most_enemy(t_info *info, int max, int res)
 {
 	res = top_left(info, 0, 0);
 	if (max < res)
@@ -118,5 +118,5 @@ int		most_enemy(t_info *info, t_piece *piece, int max, int res)
 		max = res;
 		info->most_enemy = 3;
 	}
-	return (place_middle(info, piece, 0, info->most_enemy));
+	return (info->most_enemy);
 }

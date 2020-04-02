@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/18 14:42:36 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/01 17:34:41 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/02 13:08:39 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,5 @@ void	get_positions(t_info *info, int x, int y)
 		x = 0;
 		y++;
 	}
-	info->alter = 1;
 	determine_direction(info);
 }
