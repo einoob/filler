@@ -6,14 +6,15 @@
 #    By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/11 15:37:56 by elindber          #+#    #+#              #
-#    Updated: 2020/04/02 13:02:27 by elindber         ###   ########.fr        #
+#    Updated: 2020/04/03 13:30:41 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = elindber.filler
 
 SRC =	source/main.c source/most_enemy.c source/place_vertical_or_middle.c \
-		source/piece_placement.c source/more_info.c source/parse_info.c 
+		source/piece_placement.c source/more_info.c source/parse_info.c \
+		source/most_empty.c
 
 LIBFT = ./libftprintf/libftprintf.a
 

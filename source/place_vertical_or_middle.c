@@ -6,16 +6,19 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/30 02:06:31 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 18:06:56 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/03 18:23:37 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
 
-int		enemy_direction(t_info *info, t_piece *piece)
+int		enemy_direction(t_info *info, int character)
 {
-	piece->height += 0;
-	info->direction = most_enemy(info, 0, 0);
+	if (character == 1)
+		info->direction = most_enemy(info, 0, 0);
+	else
+		info->direction = most_empty(info, 0, 0);
+	
 //	if (most_enemy(info, piece, 0, 0))
 //		return (1);
 //	info->direction = info->most_enemy < 3 ? info->most_enemy + 2 : info->most_enemy - 2;
@@ -72,8 +75,6 @@ void	place_piece_prior_y(t_info *info, t_piece *piece, int x, int y)
 			return ;
 		}
 	}
-	if (info->phase == 2 && far_side(info, 0, 0, 0))
-		info->phase = 3;
 	ft_printf("%d %d\n", y, x);
 }
 

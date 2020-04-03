@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 18:01:03 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/03 18:41:27 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,15 @@ int		character_count(t_info *info, int line)
 
 void	direction_change(t_info *info)
 {
-	if (info->phase == 0 && ((info->direction < 3 && (ft_strchr
-(info->board[0], info->own_char[0]) || character_count(info, 0)))
-	|| (info->direction > 2 && (ft_strchr(info->board[info->height - 1],
-	info->own_char[0]) || character_count(info, info->height - 1)))))
+	int		row;
+
+	row = 0;
+	while (info->phase == 0 && row < info->height)
 	{
-		if (info->direction == DOWNRIGHT || info->direction == UPRIGHT)
-			info->direction = info->direction == UPRIGHT ? DOWNRIGHT : UPRIGHT;
-		else if (info->direction == UPLEFT || info->direction == DOWNLEFT)
-			info->direction = info->direction == UPLEFT ? DOWNLEFT : UPLEFT;
-		info->phase = 1;
-	}
-	if (info->phase == 1 && (((character_count(info, 0) || ft_strchr
-(info->board[0], info->own_char[0])) && info->direction < 3) ||
-	(info->direction > 2 && (ft_strchr(info->board[info->height - 1],
-	info->own_char[0]) || character_count(info, info->height - 1)))))
-	{
-		if (info->direction == UPLEFT || info->direction == UPRIGHT)
-			info->direction = info->direction == UPLEFT ? DOWNLEFT : DOWNRIGHT;
-		else if (info->direction == DOWNLEFT || info->direction == DOWNRIGHT)
-			info->direction = info->direction == DOWNLEFT ? UPLEFT : UPRIGHT;
-		info->phase = 2;
+		if (ft_strstr(info->board[row], "XO") || ft_strstr(info->board[row], "OX") ||
+		ft_strstr(info->board[0], "OO") || ft_strstr(info->board[0], "XX"))
+			info->phase = 1;
+		row++;
 	}
 }
 
@@ -59,17 +47,17 @@ int		count_contacts(t_info *info, int x, int y)
 	int		count;
 
 	count = 0;
-	if (x + 1 < info->width && (info->board[y][x + 1] == info->enemy_char[0] ||
-	info->board[y][x + 1] == info->enemy_char[1]))
+	if (x + 2 < info->width && (info->board[y][x + 2] == info->enemy_char[0] ||
+	info->board[y][x + 2] == info->enemy_char[1]))
 		count++;
-	if (x != 0 && (info->board[y][x - 1] == info->enemy_char[0] ||
-	info->board[y][x - 1] == info->enemy_char[1]))
+	if (x > 1 && (info->board[y][x - 2] == info->enemy_char[0] ||
+	info->board[y][x - 2] == info->enemy_char[1]))
 		count++;
-	if (y + 1 < info->height && (info->board[y + 1][x] == info->enemy_char[0] ||
-	info->board[y][x] == info->enemy_char[1]))
+	if (y + 2 < info->height && (info->board[y + 2][x] == info->enemy_char[0] ||
+	info->board[y + 2][x] == info->enemy_char[1]))
 		count++;
-	if (y != 0 && (info->board[y - 1][x] == info->enemy_char[0] ||
-	info->board[y][x] == info->enemy_char[1]))
+	if (y > 1 && (info->board[y - 2][x] == info->enemy_char[0] ||
+	info->board[y - 2][x] == info->enemy_char[1]))
 		count++;
 	info->contacts += count;
 	return (1);
@@ -113,8 +101,6 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 
 	incre_y = y == 0 ? 1 : -1;
 	incre_x = x == 0 ? 1 : -1;
-	if (info->phase > 2 && place_middle(info, piece, 0, info->direction) == 1)
-		return ;
 	while (!(check_fit(info, piece, x, y)))
 	{
 		x += incre_x;
@@ -130,7 +116,7 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 			return ;
 		}
 	}
-	if (info->phase < 2)
+	if (info->phase < 1)
 		direction_change(info);
 	ft_printf("%d %d\n", y, x);
 }
@@ -169,16 +155,16 @@ void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 {
 	info->put_x = 0;
 	info->put_y = 0;
+	if (info->phase > 0) 
+		enemy_direction(info, 1);
 	y = info->direction < 3 ? 0 : info->height - piece->height;
 	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
-	if (info->phase > 2) 
-		enemy_direction(info, piece);
-	if (info->phase >= 2 && block_enemy(info, piece, x, y))
+	if (info->phase > 0 && block_enemy(info, piece, x, y))
 	{
 		ft_printf("%d %d\n", info->put_y, info->put_x);
 		return ;
 	}
-	if (info->phase == 2)
+	if (info->phase > 0)
 		place_piece_prior_y(info, piece, x, y);
 	else
 		place_piece(info, piece, x, y);
