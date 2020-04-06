@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/03 13:13:45 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/03 13:31:32 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/06 13:18:47 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	top_left(t_info *info, int x, int y)
 	{
 		while (x + 1 < info->width / 2)
 		{
-			if (info->board[y][x] == '.')
+			if (info->board[y][x] != info->own_char[0]
+			&& info->board[y][x] != info->own_char[1])
 				count++;
 			x++;
 		}
@@ -40,7 +41,8 @@ static int	top_right(t_info *info, int x, int y)
 	{
 		while (x < info->width)
 		{
-			if (info->board[y][x] == '.')
+			if (info->board[y][x] != info->own_char[0]
+			&& info->board[y][x] != info->own_char[1])
 				count++;
 			x++;
 		}
@@ -59,7 +61,8 @@ static int	bottom_left(t_info *info, int x, int y)
 	{
 		while (x + 1 < info->width / 2)
 		{
-			if (info->board[y][x] == '.')
+			if (info->board[y][x] != info->own_char[0]
+			&& info->board[y][x] != info->own_char[1])
 				count++;
 			x++;
 		}
@@ -78,7 +81,8 @@ static int	bottom_right(t_info *info, int x, int y)
 	{
 		while (x < info->width)
 		{
-			if (info->board[y][x] == '.')
+			if (info->board[y][x] != info->own_char[0]
+			&& info->board[y][x] != info->own_char[1])
 				count++;
 			x++;
 		}

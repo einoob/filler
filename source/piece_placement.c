@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/03 18:41:27 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/06 15:19:29 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,26 @@ void	direction_change(t_info *info)
 	}
 }
 
+void	count_corners(t_info *info, int x, int y)
+{
+	int		count;
+
+	count = 0;
+	if (y > 0 && x > 0 && (info->board[y - 1][x - 1] == info->enemy_char[0]
+	|| info->board[y - 1][x - 1] == info->enemy_char[1]))
+		count++;
+	if (y > 0 && x + 1 < info->width && (info->board[y - 1][x + 1] == info->enemy_char[0]
+	|| info->board[y - 1][x + 1] == info->enemy_char[1]))
+		count++;
+	if (y + 1 < info->height && x > 0 && (info->board[y + 1][x - 1] == info->enemy_char[0]
+	|| info->board[y + 1][x - 1] == info->enemy_char[1]))
+		count++;
+	if (y + 1 < info->height && x + 1 < info->width && (info->board[y + 1][x + 1] == info->enemy_char[0]
+	|| info->board[y + 1][x + 1] == info->enemy_char[1]))
+		count++;
+	info->contacts += count;
+}
+
 int		count_contacts(t_info *info, int x, int y)
 {
 	int		count;
@@ -60,6 +80,7 @@ int		count_contacts(t_info *info, int x, int y)
 	info->board[y - 2][x] == info->enemy_char[1]))
 		count++;
 	info->contacts += count;
+	count_corners(info, x, y);
 	return (1);
 }
 
@@ -160,12 +181,14 @@ void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 	y = info->direction < 3 ? 0 : info->height - piece->height;
 	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
 	if (info->phase > 0 && block_enemy(info, piece, x, y))
-	{
 		ft_printf("%d %d\n", info->put_y, info->put_x);
-		return ;
-	}
-	if (info->phase > 0)
+//	if (info->phase > 0)
+//		info->most_enemy = info->most_enemy % 2 == 0
+//		? info->most_enemy + 1  : info->most_enemy - 1; 
+//	if (info->phase > 0 && place_middle(info, piece, x, info->most_enemy))
+//		return ;
+	else if (info->phase > 0)
 		place_piece_prior_y(info, piece, x, y);
-	else
+	else 
 		place_piece(info, piece, x, y);
 }
