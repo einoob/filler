@@ -6,13 +6,13 @@
 #    By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/11 15:37:56 by elindber          #+#    #+#              #
-#    Updated: 2020/04/07 13:26:03 by elindber         ###   ########.fr        #
+#    Updated: 2020/04/07 22:17:49 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = elindber.filler
 
-SRC =	source/main.c source/most_enemy.c source/place_vertical_or_middle.c \
+SRC =	source/main.c source/most_enemy.c source/place_piece_prior_y.c \
 		source/piece_placement.c source/more_info.c source/parse_info.c \
 		source/contact_counts.c
 

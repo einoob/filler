@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:50:16 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/07 14:29:17 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/07 22:15:15 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,6 @@ int		main(void)
 		if (!(read_output(info, piece, 0)))
 			return (0);
 		get_positions(info, 0, 0);
-	//	int i = 0;
-	//	while (i < 32424242)
-	//		i++;
 		reach_enemy(info, piece, 0, 0);
 		free_board_and_piece(info, piece);
 		if (info->stop == 1)
