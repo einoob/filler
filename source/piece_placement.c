@@ -6,27 +6,11 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/06 15:19:29 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/07 14:18:20 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
-
-int		character_count(t_info *info, int line)
-{
-	int		i;
-	int		count;
-
-	i = 0;
-	count = 0;
-	while (info->board[line][i])
-	{
-		if (info->board[line][i] != '.' || info->board[line][i] != '.')
-			count++;
-		i++;
-	}
-	return (count > info->width / 3);
-}
 
 void	direction_change(t_info *info)
 {
@@ -35,53 +19,16 @@ void	direction_change(t_info *info)
 	row = 0;
 	while (info->phase == 0 && row < info->height)
 	{
-		if (ft_strstr(info->board[row], "XO") || ft_strstr(info->board[row], "OX") ||
+		if (ft_strstr(info->board[row], "XO") ||
+		ft_strstr(info->board[row], "OX") || ft_strstr(info->board[row], "O.X")
+		|| ft_strstr(info->board[row], "X.O") ||
 		ft_strstr(info->board[0], "OO") || ft_strstr(info->board[0], "XX"))
 			info->phase = 1;
 		row++;
 	}
-}
-
-void	count_corners(t_info *info, int x, int y)
-{
-	int		count;
-
-	count = 0;
-	if (y > 0 && x > 0 && (info->board[y - 1][x - 1] == info->enemy_char[0]
-	|| info->board[y - 1][x - 1] == info->enemy_char[1]))
-		count++;
-	if (y > 0 && x + 1 < info->width && (info->board[y - 1][x + 1] == info->enemy_char[0]
-	|| info->board[y - 1][x + 1] == info->enemy_char[1]))
-		count++;
-	if (y + 1 < info->height && x > 0 && (info->board[y + 1][x - 1] == info->enemy_char[0]
-	|| info->board[y + 1][x - 1] == info->enemy_char[1]))
-		count++;
-	if (y + 1 < info->height && x + 1 < info->width && (info->board[y + 1][x + 1] == info->enemy_char[0]
-	|| info->board[y + 1][x + 1] == info->enemy_char[1]))
-		count++;
-	info->contacts += count;
-}
-
-int		count_contacts(t_info *info, int x, int y)
-{
-	int		count;
-
-	count = 0;
-	if (x + 2 < info->width && (info->board[y][x + 2] == info->enemy_char[0] ||
-	info->board[y][x + 2] == info->enemy_char[1]))
-		count++;
-	if (x > 1 && (info->board[y][x - 2] == info->enemy_char[0] ||
-	info->board[y][x - 2] == info->enemy_char[1]))
-		count++;
-	if (y + 2 < info->height && (info->board[y + 2][x] == info->enemy_char[0] ||
-	info->board[y + 2][x] == info->enemy_char[1]))
-		count++;
-	if (y > 1 && (info->board[y - 2][x] == info->enemy_char[0] ||
-	info->board[y - 2][x] == info->enemy_char[1]))
-		count++;
-	info->contacts += count;
-	count_corners(info, x, y);
-	return (1);
+	if (info->height < 20 && info->player == 2 &&
+	(ft_strstr(info->board[0], ".................")))
+		info->phase = 0;
 }
 
 int		check_fit(t_info *info, t_piece *piece, int x, int y)
@@ -98,13 +45,11 @@ int		check_fit(t_info *info, t_piece *piece, int x, int y)
 	{
 		while (piece->piece[py][++px] != '\0')
 		{
-			if (piece->piece[py][px] == '*' && (info->board[y][x] ==
-			info->own_char[0] || info->board[y][x] == info->own_char[1])
-			&& count_contacts(info, x, y))
+			if (piece->piece[py][px] == '*' &&
+			own_char(info, info->board[y][x]) && count_contacts(info, x, y))
 				overlap++;
 			if (overlap > 1 || (piece->piece[py][px] == '*' &&
-			(info->board[y][x] != info->own_char[0] && info->board[y][x]
-			!= info->own_char[1] && info->board[y][x] != '.')))
+			!(own_char(info, info->board[y][x])) && info->board[y][x] != '.'))
 				return (0);
 			x++;
 		}
@@ -144,7 +89,7 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 
 int		block_enemy(t_info *info, t_piece *piece, int x, int y)
 {
-	int		contacts;
+	double	contacts;
 	int		incre_x;
 	int		incre_y;
 
@@ -155,14 +100,11 @@ int		block_enemy(t_info *info, t_piece *piece, int x, int y)
 	{
 		while (x >= 0 && x <= info->width - piece->width)
 		{
-			if (check_fit(info, piece, x, y))
+			if (check_fit(info, piece, x, y) && info->contacts > contacts)
 			{
-				if (info->contacts > contacts)
-				{
-					info->put_x = x;
-					info->put_y = y;
-					contacts = info->contacts;
-				}
+				info->put_x = x;
+				info->put_y = y;
+				contacts = info->contacts;
 			}
 			x += incre_x;
 		}
@@ -176,19 +118,14 @@ void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 {
 	info->put_x = 0;
 	info->put_y = 0;
-	if (info->phase > 0) 
-		enemy_direction(info, 1);
+	if (info->phase > 0)
+		info->direction = most_enemy(info, 0, 0);
 	y = info->direction < 3 ? 0 : info->height - piece->height;
 	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
 	if (info->phase > 0 && block_enemy(info, piece, x, y))
 		ft_printf("%d %d\n", info->put_y, info->put_x);
-//	if (info->phase > 0)
-//		info->most_enemy = info->most_enemy % 2 == 0
-//		? info->most_enemy + 1  : info->most_enemy - 1; 
-//	if (info->phase > 0 && place_middle(info, piece, x, info->most_enemy))
-//		return ;
 	else if (info->phase > 0)
 		place_piece_prior_y(info, piece, x, y);
-	else 
+	else
 		place_piece(info, piece, x, y);
 }

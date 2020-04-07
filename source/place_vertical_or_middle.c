@@ -6,20 +6,11 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/30 02:06:31 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/06 12:47:49 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/07 13:53:15 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
-
-int		enemy_direction(t_info *info, int character)
-{
-	if (character == 1)
-		info->direction = most_enemy(info, 0, 0);
-	else
-		info->direction = most_empty(info, 0, 0);
-	return (info->direction);
-}
 
 int		far_side(t_info *info, int row, int count, int own)
 {
@@ -92,7 +83,7 @@ int		place_middle(t_info *info, t_piece *piece, int x, int direction)
 			y += incre_y;
 			x = -1 + info->width / 2;
 		}
-		if (y == info->height / 5 || y == 4 * (info->height / 5) || 
+		if (y == info->height / 5 || y == 4 * (info->height / 5) ||
 		y + piece->height > info->height)
 			return (0);
 	}

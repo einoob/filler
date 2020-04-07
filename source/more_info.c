@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/18 14:42:36 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/06 16:20:34 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/07 14:07:49 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	determine_direction(t_info *info)
 	if (info->own_y > info->height / 2 && info->own_x < info->width / 2
 	&& info->height < 20)
 		info->direction = UPRIGHT;
-	else if (info->own_y > info->height / 2 && info->height == 24)
-		info->direction = DOWNRIGHT;
 }
 
 void	get_positions(t_info *info, int x, int y)
