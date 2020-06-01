@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/07 14:18:20 by elindber         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:53:00 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,17 @@ void	place_piece(t_info *info, t_piece *piece, int x, int y)
 	int		incre_y;
 	int		incre_x;
 
-	incre_y = y == 0 ? 1 : -1;
-	incre_x = x == 0 ? 1 : -1;
+	incre_y = y == piece->y_start ? 1 : -1;
+	incre_x = x == piece->x_start ? 1 : -1;
 	while (!(check_fit(info, piece, x, y)))
 	{
 		x += incre_x;
-		if (x < 0 || x > info->width - piece->width)
+		if (x < piece->x_start || x > piece->x_end)
 		{
 			y += incre_y;
-			x = x == -1 ? info->width - piece->width : 0;
+			x = x < piece->x_start ? piece->x_end : piece->x_start;
 		}
-		if (y < 0 || y > info->height - piece->height)
+		if (y < piece->y_start || y > piece->y_end)
 		{
 			ft_printf("0 0\n");
 			info->stop = 1;
@@ -94,11 +94,11 @@ int		block_enemy(t_info *info, t_piece *piece, int x, int y)
 	int		incre_y;
 
 	contacts = 0;
-	incre_y = y == 0 ? 1 : -1;
-	incre_x = x == 0 ? 1 : -1;
-	while (y >= 0 && y <= info->height - piece->height)
+	incre_y = y == piece->y_start ? 1 : -1;
+	incre_x = x == piece->x_start ? 1 : -1;
+	while (y >= piece->y_start && y <= piece->y_end)
 	{
-		while (x >= 0 && x <= info->width - piece->width)
+		while (x >= piece->x_start && x <= piece->x_end)
 		{
 			if (check_fit(info, piece, x, y) && info->contacts > contacts)
 			{
@@ -109,7 +109,7 @@ int		block_enemy(t_info *info, t_piece *piece, int x, int y)
 			x += incre_x;
 		}
 		y += incre_y;
-		x = incre_x < 0 ? info->width - piece->width : 0;
+		x = incre_x < 0 ? piece->x_end : piece->x_start;
 	}
 	return (contacts > 0);
 }
@@ -120,8 +120,8 @@ void	reach_enemy(t_info *info, t_piece *piece, int x, int y)
 	info->put_y = 0;
 	if (info->phase > 0)
 		info->direction = most_enemy(info, 0, 0);
-	y = info->direction < 3 ? 0 : info->height - piece->height;
-	x = info->direction % 2 == 0 ? 0 : info->width - piece->width;
+	y = info->direction < 3 ? piece->y_start : piece->y_end;
+	x = info->direction % 2 == 0 ? piece->x_start : piece->x_end;
 	if (info->phase > 0 && block_enemy(info, piece, x, y))
 		ft_printf("%d %d\n", info->put_y, info->put_x);
 	else if (info->phase > 0)

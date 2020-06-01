@@ -6,39 +6,35 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 15:37:14 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/02 01:24:01 by elindber         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:50:25 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
 
-void	piece_values(t_piece *piece, int x, int y, int last_x)
+void	piece_values(t_info *info, t_piece *piece, int x, int y)
 {
 	int		first_x;
-	int		first_y;
 
 	first_x = piece->width - 1;
-	first_y = -1;
 	while (piece->piece[y] != NULL)
 	{
 		while (piece->piece[y][x] != '\0')
 		{
-			if (piece->piece[y][x] == '*' && first_y < 0)
-				first_y = y;
+			if (piece->piece[y][x] == '*' && piece->y_start > 0)
+				piece->y_start = 0 - y;
 			if (piece->piece[y][x] == '*' && first_x > x)
 				first_x = x;
-			if (piece->piece[y][x] == '*' && last_x < x)
-				last_x = x;
+			if (piece->piece[y][x] == '*' && piece->x_end <= x)
+				piece->x_end = info->width - x - 1;
 			if (piece->piece[y][x] == '*')
-				piece->last_y = y;
+				piece->y_end = info->height - y - 1;
 			x++;
 		}
 		x = 0;
 		y++;
 	}
-	piece->first_x = first_x;
-	piece->last_x = last_x;
-	piece->first_y = first_y;
+	piece->x_start = 0 - first_x;
 }
 
 int		dup_piece(t_piece *piece, int y)
@@ -56,7 +52,7 @@ int		dup_piece(t_piece *piece, int y)
 	return (1);
 }
 
-int		read_piece(t_piece *piece, int x)
+int		read_piece(t_info *info, t_piece *piece, int x)
 {
 	char	*line;
 
@@ -77,8 +73,9 @@ int		read_piece(t_piece *piece, int x)
 		}
 		free(line);
 	}
-	dup_piece(piece, 0);
-	piece_values(piece, 0, 0, 0);
+	if (!dup_piece(piece, 0))
+		return (0);
+	piece_values(info, piece, 0, 0);
 	return (1);
 }
 
@@ -122,7 +119,7 @@ int		read_output(t_info *info, t_piece *piece, int x)
 		}
 		free(line);
 	}
-	if (!(dup_board(info, 0)) || !(read_piece(piece, 0)))
+	if (!(dup_board(info, 0)) || !(read_piece(info, piece, 0)))
 		return (0);
 	return (1);
 }

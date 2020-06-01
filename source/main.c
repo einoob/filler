@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:50:16 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/07 22:15:15 by elindber         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:50:05 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	reset_piece(t_piece *piece)
 {
 	piece->height = 0;
 	piece->width = 0;
-	piece->first_x = 0;
-	piece->last_x = 0;
-	piece->first_y = 0;
-	piece->last_y = 0;
+	piece->x_start = 0;
+	piece->x_end = 0;
+	piece->y_start = 1;
+	piece->y_end = 0;
 }
 
 int		main(void)

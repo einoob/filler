@@ -6,7 +6,7 @@
 /*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:26:42 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/07 13:49:04 by elindber         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:54:09 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@
 # define DOWNRIGHT 3
 # define DOWNLEFT 4
 
-typedef struct s_piece
+typedef struct	s_piece
 {
 	char		**piece;
 	int			height;
 	int			width;
-	int			first_x;;
-	int			last_x;
-	int			first_y;
-	int			last_y;
+	int			x_start;
+	int			x_end;
+	int			y_start;
+	int			y_end;
 }				t_piece;
-
 
 typedef struct	s_info
 {
@@ -59,7 +58,8 @@ typedef struct	s_info
 int				read_output(t_info *info, t_piece *piece, int x);
 int				check_fit(t_info *info, t_piece *piece, int x, int y);
 int				own_char(t_info *info, char board);
-int				place_middle(t_info *info, t_piece *piece, int x, int direction);
+int				place_middle
+(t_info *info, t_piece *piece, int x, int direction);
 int				most_enemy(t_info *info, int max, int res);
 int				count_contacts(t_info *info, int x, int y);
 void			get_positions(t_info *info, int x, int y);
