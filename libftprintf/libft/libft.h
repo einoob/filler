@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:13:27 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/11 18:48:51 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/30 14:45:42 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 
 typedef	struct		s_list
 {
@@ -46,6 +46,7 @@ void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
+size_t				ft_nbrcount(intmax_t nbr);
 char				*ft_strdup(const char *s1);
 char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
@@ -77,7 +78,6 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
-uintmax_t			ft_nbrcount(intmax_t nbr);
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 

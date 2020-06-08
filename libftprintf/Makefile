@@ -6,7 +6,7 @@
 #    By: elindber <elindber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 16:24:48 by elindber          #+#    #+#              #
-#    Updated: 2020/02/17 17:17:08 by elindber         ###   ########.fr        #
+#    Updated: 2020/06/08 16:10:46 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRC = srcs/ft_printf.c srcs/minwth_print.c srcs/print_c.c srcs/print_f.c \
 
 OBJ = ft_printf.o minwth_print.o print_c.o print_f.o print_p.o print_s.o \
 	  print_x.o scan_tags.o imaxtoa.o number_cast.o print_d.o print_o.o \
-	  print_percent.o print_u.o put_zeros.o set_tags_and_print.o get_next_line.o
+	  print_percent.o print_u.o put_zeros.o set_tags_and_print.o \
+	  get_next_line.o
 
 LIBFT = ./libft/libft.a
 
@@ -32,10 +33,12 @@ $(NAME):
 	@ gcc -Wall -Wextra -Werror -c $(SRC)
 	@ ar rc $(NAME) $(OBJ)
 	@ ranlib $(NAME)
+	@ echo "libftprintf.a done"
 
 clean:
-	@ /bin/rm -f $(OBJ)
+	@ /bin/rm -f *.o
 	@ make -C libft/ clean
+	@ echo "printf: object files removed"
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
@@ -46,6 +49,6 @@ re: fclean all
 
 run: $(NAME)
 	@ gcc $(NAME) main.c
-	@ /bin/rm -f $(OBJ)
+	@ /bin/rm -f *.o
 	@ make -C libft/ clean
 	@ ./a.out

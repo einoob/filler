@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:59:16 by elindber          #+#    #+#             */
-/*   Updated: 2020/03/11 19:22:46 by elindber         ###   ########.fr       */
+/*   Updated: 2020/04/30 14:39:15 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_itoa(int n)
 {
-	uintmax_t	count;
+	size_t		count;
 	long		nbr;
 	char		*str;
 

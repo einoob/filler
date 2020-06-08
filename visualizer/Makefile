@@ -5,38 +5,31 @@
 #                                                     +:+ +:+         +:+      #
 #    By: elindber <elindber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/11 15:37:56 by elindber          #+#    #+#              #
-#    Updated: 2020/06/08 16:10:19 by elindber         ###   ########.fr        #
+#    Created: 2020/06/02 12:38:06 by elindber          #+#    #+#              #
+#    Updated: 2020/06/08 17:11:42 by elindber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = elindber.filler
+NAME = visual.a
 
-SRC =	source/main.c source/most_enemy.c source/place_piece_prior_y.c \
-		source/piece_placement.c source/more_info.c source/parse_info.c \
-		source/contact_counts.c
-
-LIBFT = ./libftprintf/libftprintf.a
+SRC = main.c random_funcs.c read_output.c visualize.c 
 
 FLAGS = -Wall -Wextra -Werror
+
+MLXFLAGS = -lmlx -framework OpenGL -framework AppKit
+
+LIB = ../libftprintf/
 
 all : $(NAME)
 
 $(NAME):
-	@ make -C libftprintf/ re
-	@ gcc $(FLAGS) -o $(NAME) $(SRC) $(LIBFT)
-	@ make -C visualizer/ re
-	@ echo "Ready to play." 
-	
+	@ gcc $(FLAGS) -o $(NAME) $(SRC) $(MLXFLAGS) -L $(LIB) -lftprintf
+
 clean:
-	@ make -C libftprintf/ clean
-	@ echo "Object files cleaned."
-	
+	@ /bin/rm -f *.o
+
 fclean: clean
 	@ /bin/rm -f $(NAME)
-	@ /bin/rm -f filler.trace	
-	@ make -C libftprintf/ fclean
-	@ make -C visualizer fclean
-	@ echo "Removed: elindber.filler and filler.trace"
 
-re: fclean all
+re : fclean all
+

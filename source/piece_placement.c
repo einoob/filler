@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   piece_placement.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 14:16:23 by elindber          #+#    #+#             */
-/*   Updated: 2020/05/29 16:53:00 by elindber         ###   ########.fr       */
+/*   Updated: 2020/06/08 16:58:50 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ void	direction_change(t_info *info)
 	{
 		if (ft_strstr(info->board[row], "XO") ||
 		ft_strstr(info->board[row], "OX") || ft_strstr(info->board[row], "O.X")
-		|| ft_strstr(info->board[row], "X.O") ||
-		ft_strstr(info->board[0], "OO") || ft_strstr(info->board[0], "XX"))
+		|| ft_strstr(info->board[row], "X.O") || ft_strstr(info->board[row],
+		"O..X") || ft_strstr(info->board[row], "X..O") ||
+		ft_strstr(info->board[0], "OO") || ft_strstr(info->board[0], "XX")
+		|| ft_strstr(info->board[info->height - 1], "OO") ||
+		ft_strstr(info->board[info->height - 1], "XX"))
 			info->phase = 1;
 		row++;
 	}

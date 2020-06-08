@@ -22,13 +22,11 @@ static int		ft_iswhtspc(int c)
 char			*ft_strtrim(char const *s)
 {
 	int		i;
-	int		t;
 	int		end;
 	char	*trim;
 
 	if (!s)
 		return (NULL);
-	t = 0;
 	i = (int)(ft_strlen(s) - 1);
 	while (ft_iswhtspc(s[i]))
 		i--;

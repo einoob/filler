@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 13:50:16 by elindber          #+#    #+#             */
-/*   Updated: 2020/05/29 16:50:05 by elindber         ###   ########.fr       */
+/*   Updated: 2020/06/02 16:34:20 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int		main(void)
 	|| !(piece = (t_piece*)malloc(sizeof(t_piece))))
 		return (-1);
 	info->phase = 0;
+	info->own_char = NULL;
+	info->enemy_char = NULL;
 	while (1)
 	{
 		reset_piece(piece);

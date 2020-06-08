@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more_info.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elindber <elindber@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: elindber <elindber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/18 14:42:36 by elindber          #+#    #+#             */
-/*   Updated: 2020/04/07 22:12:19 by elindber         ###   ########.fr       */
+/*   Updated: 2020/06/02 12:34:16 by elindber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	determine_direction(t_info *info)
 
 void	get_positions(t_info *info, int x, int y)
 {
-	if (info->own_char && info->enemy_char)
+	if (info->own_char != NULL && info->enemy_char != NULL)
 		return ;
 	info->own_char = info->player == 1 ? "Oo" : "Xx";
 	info->enemy_char = info->player == 1 ? "Xx" : "Oo";
